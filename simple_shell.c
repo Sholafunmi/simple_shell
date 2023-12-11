@@ -14,10 +14,11 @@ int main()
                         wait(NULL);
                 } else {
                         custom_strcpy(cmd, "/bin/");
-                        strcat(cmd, command); // substitute
-                        execve(cmd, parameters, envp);
+			custom_strcat(cmd, command);
+                 	execve(cmd, parameters, envp);
                 }
-                if (strcmp(command, "exit") == 0) {  // substitute strcmp()
+		if (custom_strcmp(command, "exit") == 0) 
+		{
                         break;
                 }
         }

@@ -9,7 +9,7 @@ void read_command(char cmd[], char *par[])
 
         for ( ;; )
         {
-                int c  = fgetc(stdin); // find substitute for fgetc()
+                int c  = custom_fgetc(stdin);
                 line[count++] = (char) c;
                 if(c == '\n')
                 {
@@ -21,7 +21,7 @@ void read_command(char cmd[], char *par[])
 
         while (pch != NULL)
         {
-                array[i++] = strdup(pch); // find substitute of strdup()
+                array[i++] = custom_strdup(pch);
                 pch = strtok(NULL, " \n");
         }
         strcpy(cmd, array[0]);
