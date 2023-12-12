@@ -1,45 +1,37 @@
 #include "simple_shell.h"
 
+/**
+ * custom_strcat - Concatenates two strings.
+ * @destination: The destination string to concatenate to.
+ * @source: The source string to append.
+ *
+ * This function appends the content of the source string to the destination
+ * string, and ensures that the destination string is null-terminated.
+ * The destination string must have enough space to accommodate both strings.
+ *
+ * Parameters:
+ *   destination: A pointer to the destination string.
+ *   source:      The source string to be appended.
+ *
+ * Return: A pointer to the destination string.
+ */
 
-char* custom_strcat(char* destination, const char* source) 
+char *custom_strcat(char *destination, const char *source)
 {
-    char* result = destination;
+	char *result = destination;
 
-    // Move to the end of the destination string
-    while (*destination) {
-        destination++;
-    }
+	while (*destination)
+		destination++;
 
-    // Copy characters from source to destination
-    while (*source) {
-        *destination = *source;
-        destination++;
-        source++;
-    }
-
-    // Null-terminate the result
-    *destination = '\0';
-
-    return result;
-
-
-
-
-	/*** char* ptr = destination;
-
-	while (*ptr != '\0')
+	while (*source)
 	{
-		ptr++;
-	}
-
-	while (*source != '\0') 
-	{
-		*ptr = *source;
-		ptr++;
+		*destination = *source;
+		destination++;
 		source++;
 	}
 
-	*ptr = '\0';
+	*destination = '\0';
 
-	return destination; */
+	return (result);
+
 }

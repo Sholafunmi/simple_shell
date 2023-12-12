@@ -1,20 +1,25 @@
 #include "simple_shell.h"
 
-int custom_fgetc(FILE* stream) {
-    if (stream == NULL) {
-        return EOF;
-    }
 
-    int c = getc(stream);
+/**
+ * custom_fgetc - Reads a character from a file stream.
+ * @stream: This file stream to read from.
+ *
+ * Return: The character read, or EOF if the end of file is reached or an error occurs.
+ */
 
-    if (c == EOF) {
-        if (feof(stream)) {
+int custom_fgetc(FILE *stream)
+{
+	if (stream == NULL)
+		return (EOF);
 
-            printf("End of file reached.\n");
-        } else if (ferror(stream)) {
-            perror("Error reading from file");
-        }
-    }
+	int c = getc(stream);
 
-    return c;
+	if (c == EOF)
+		if (feof(stream))
+			printf("End of file reached.\n");
+		else if (ferror(stream))
+			perror("Error reading from file");
+
+	return (c);
 }

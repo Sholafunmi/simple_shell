@@ -3,20 +3,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* custom_strdup(const char* source) {
-    if (source == NULL) {
-        return NULL;
-    }
+/**
+ * custom_strdup - This duplicates a string.
+ * @source: The string to duplicate.
+ *
+ * Return: A pointer to the duplicated string, or NULL if allocation fails.
+ */
 
-    size_t length = strlen(source);
-    char* destination = (char*)malloc(length + 1);
 
-    if (destination == NULL) {
-        perror("Memory allocation failed");
-        return NULL;
-    }
+char *custom_strdup(const char *source)
+{
+	if (source == NULL)
+		return (NULL);
 
-    strcpy(destination, source);
+	size_t length = strlen(source);
+	char *destination = (char *)malloc(length + 1);
 
-    return destination;
+	if (destination == NULL)
+	{
+		perror("Memory allocation failed");
+		return (NULL);
+	}
+
+	strcpy(destination, source);
+
+	return (destination);
 }
