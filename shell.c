@@ -1,3 +1,4 @@
+// shell.c
 #include "shell.h"
 
 void shell_loop(void)
@@ -8,7 +9,7 @@ void shell_loop(void)
 
     do
     {
-        printf("$");
+        write(STDOUT_FILENO, "SimpleShell> ", 13);
         line = read_line();
         args = split_line(line);
         status = execute_command(args);
@@ -58,73 +59,19 @@ int execute_command(char **args)
     if (strcmp(args[0], "cd") == 0)
     {
         if (args[1] == NULL)
-            fprintf(stderr, "SimpleShell: expected argument to \"cd\"\n");
+            write(STDERR_FILENO, "SimpleShell: expected argument to \"cd\"\n", 42);
         else
         {
             if (chdir(args[1]) != 0)
                 perror("SimpleShell");
         }
     }
-    else if (strcmp(args[0], "ls") == 0)
+    else if (strcmp(args[0], "ls") == 0 || strcmp(args[0], "mkdir") == 0 || strcmp(args[0], "env") == 0)
     {
         pid = fork();
         if (pid == 0)
         {
-            execvp(args[0], args);
-            perror("SimpleShell");
-            exit(EXIT_FAILURE);
-        }
-        else if (pid < 0)
-        {
-            perror("SimpleShell");
-        }
-        else
-        {
-            do
-            {
-                wpid = waitpid(pid, &status, WUNTRACED);
-            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-        }
-    }
-    else if (strcmp(args[0], "mkdir") == 0)
-    {
-        pid = fork();
-        if (pid == 0)
-        {
-            execvp(args[0], args);
-            perror("SimpleShell");
-            exit(EXIT_FAILURE);
-        }
-        else if (pid < 0)
-        {
-            perror("SimpleShell");
-        }
-        else
-        {
-            do
-            {
-                wpid = waitpid(pid, &status, WUNTRACED);
-            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-        }
-    }
-    else if (strcmp(args[0], "env") == 0)
-    {
-        char **env = environ;
-        while (*env)
-        {
-            printf("%s\n", *env);
-            env++;
-        }
-    }
-    else if (strcmp(args[0], "exit") == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        pid = fork();
-        if (pid == 0)
-        {
+            // Child process
             if (execvp(args[0], args) == -1)
                 perror("SimpleShell");
             exit(EXIT_FAILURE);
@@ -135,10 +82,46 @@ int execute_command(char **args)
         }
         else
         {
+            // Parent process
             do
             {
                 wpid = waitpid(pid, &status, WUNTRACED);
             } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
+    }
+    else if (strcmp(args[0], "exit") == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        // Check if the command exists in the PATH
+        if (access(args[0], F_OK) != -1)
+        {
+            pid = fork();
+            if (pid == 0)
+            {
+                // Child process
+                if (execvp(args[0], args) == -1)
+                    perror("SimpleShell");
+                exit(EXIT_FAILURE);
+            }
+            else if (pid < 0)
+            {
+                perror("SimpleShell");
+            }
+            else
+            {
+                // Parent process
+                do
+                {
+                    wpid = waitpid(pid, &status, WUNTRACED);
+                } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+            }
+        }
+        else
+        {
+            write(STDERR_FILENO, "SimpleShell: command not found\n", 30);
         }
     }
 
