@@ -15,5 +15,5 @@ char *custom_strcat(char *destination, const char *source);
 int custom_strcmp(const char *str1, const char *str2);
 int custom_fgetc(FILE *stream);
 char *custom_strdup(const char *source);
-
+void printing(const char *message);
 #endif
