@@ -8,10 +8,10 @@
 
 int co(char *filepath)
 {
-	char *err, *lerr_str, *name;
-	int length, lerr;
+	char *err, *lerr_str;
+	int length;
 
-	lerr_str = _itoa(lerr);
+	lerr_str = _itoa(hist);
 	if (lerr_str == NULL)
 		return (1);
 
@@ -50,9 +50,9 @@ int take_file(char *filepath, int *exe)
 	unsigned int oldsize = 200;
 	char *line, **args, **front;
 	char store[200];
-	int back, lerr;
+	int back;
 
-	lerr = 0;
+	hist = 0;
 	file = open(filepath, O_RDONLY);
 	if (file == -1)
 	{
@@ -89,7 +89,7 @@ int take_file(char *filepath, int *exe)
 	handle_line(&line, linesize);
 	args = _strtok(line, " ");
 	free(line);
-	if (args = 0) 
+	if (args == 0) 
 		return (0);
 	if (check_args(args) != 0)
 	{

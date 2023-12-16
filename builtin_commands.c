@@ -1,10 +1,9 @@
 #include "shell.h"
 
-
 /**
  * get_cmd - gets builtin commands
  * @command: The command to match.
- * @ac: arguements
+ * @av: arguements
  * @pipe: third arguement
  * Return: integer
  */
@@ -36,7 +35,6 @@ int (*get_cmd(char *command))(char **av, char **pipe)
  * @front: third parameter
  * Return: integer
  */
-
 int shellby_exit(char **args, char **front)
 {
 	int i, len_of_int = 10;
@@ -76,7 +74,6 @@ int shellby_exit(char **args, char **front)
  * @front: 3rd parameter
  * Return: integer
 */
-
 int shellby_cd(char **args, char __attribute__((__unused__)) **front)
 {
 	char **dir_info, *new_line = "\n";
@@ -86,7 +83,6 @@ int shellby_cd(char **args, char __attribute__((__unused__)) **front)
 	oldpwd = getcwd(oldpwd, 0);
 	if (!oldpwd)
 		return (-1);
-
 	if (args[0])
 	{
 		if (*(args[0]) == '-' || _strcmp(args[0], "--") == 0)
@@ -157,7 +153,7 @@ int shellby_cd(char **args, char __attribute__((__unused__)) **front)
  */
 int shellby_help(char **args, char __attribute__((__unused__)) **front)
 {
-	char *name;
+
 	if (!args[0])
 		help_all();
 	else if (_strcmp(args[0], "alias") == 0)

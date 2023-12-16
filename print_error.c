@@ -7,10 +7,10 @@
  */
 char *environment_error(char **ac)
 {
-	char *error, *err_str, *name;
-	int length, err;
+	char *error, *err_str;
+	int length;
 
-	err_str = _itoa(err);
+	err_str = _itoa(hist);
 	if (err_str == NULL)
 		return (NULL);
 
@@ -42,7 +42,7 @@ char *environment_error(char **ac)
  */
 char *error_1(char **args)
 {
-char *error, *name;
+char *error;
 int len;
 
 len = _strlen(name) + _strlen(args[0]) + 13;
@@ -65,8 +65,8 @@ return (error);
  */
 char *error_2_exit(char **args)
 {
-char *error, *hist_str, *name;
-int len, hist;
+char *error, *hist_str;
+int len;
 
 hist_str = _itoa(hist);
 if (!hist_str)
@@ -99,8 +99,8 @@ return (error);
  */
 char *error_2_cd(char **args)
 {
-char *error, *hist_str, *name;
-int len, hist;
+char *error, *hist_str;
+int len;
 
 hist_str = _itoa(hist);
 if (!hist_str)
@@ -138,8 +138,8 @@ return (error);
  */
 char *error_2_syntax(char **args)
 {
-char *error, *hist_str, *name;
-int len, hist;
+char *error, *hist_str;
+int len;
 
 hist_str = _itoa(hist);
 if (!hist_str)

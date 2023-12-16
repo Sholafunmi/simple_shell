@@ -10,8 +10,8 @@
 int main(int argc, char *argv[])
 {
         int ret = 0, retn;
-        int *exe_ret = &retn, hist;
-        char *prompt = "#cisfun$ ", *new_line = "\n", *name;
+        int *exe_ret = &retn;
+        char *prompt = "#cisfun$ ", *new_line = "\n";
 
         name = argv[0];
         hist = 1;

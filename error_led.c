@@ -1,19 +1,19 @@
 #include "shell.h"
 
 /**
- * error_126 - Creates an error message 
+ * error_126 - Creates an error message
  * @ac: An array of arguments passed to the command.
  * Return: error string
  */
 char *error_126(char **ac)
 {
 
-	
-	char *error, *err_str, *name;
-	int len, err;
 
-	err_str = _itoa(err);
-	
+	char *error, *err_str;
+	int len;
+
+	err_str = _itoa(hist);
+
 	if (err_str == NULL)
 		return (NULL);
 
@@ -43,8 +43,8 @@ return (error);
  */
 char *error_127(char **ac)
 {
-	char *error, *hist_str, *name;
-	int len, hist;
+	char *error, *hist_str;
+	int len;
 
 	hist_str = _itoa(hist);
 	if (hist_str == NULL)
