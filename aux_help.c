@@ -1,4 +1,4 @@
-#include "shell"
+#include "shell.h"
 
 /**
  * handle_line - Partitions a line read from standard input as needed.

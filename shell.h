@@ -60,7 +60,7 @@ alias_t *aliases;
 
 int strtok_len(char *str, char *delim);
 int count_tokens(char *str, char *delim);
-
+void logical_ops(char *line, ssize_t *new_len);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char **_strtok(char *line, char *delim);
@@ -121,6 +121,7 @@ void help_history(void);
 
 int take_file(char *filepath, int *exe);
 void signal_control(int sig);
+ssize_t get_new_len(char *line);
 
 #endif
 

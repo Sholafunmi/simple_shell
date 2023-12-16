@@ -152,19 +152,19 @@ int handle_args(int *exe_ret)
 	}
 	front = args;
 
-for (index = 0; args[index]; index++)
-{
-	if (_strncmp(args[index], ";", 1) == 0)
+	for (index = 0; args[index]; index++)
 	{
-		free(args[index]);
-		args[index] = NULL;
-		ret = call_args(args, front, exe_ret);
-		args = &args[++index];
-		index = 0;
+		if (_strncmp(args[index], ";", 1) == 0)
+		{
+			free(args[index]);
+			args[index] = NULL;
+			ret = call_args(args, front, exe_ret);
+			args = &args[++index];
+			index = 0;
+		}
 	}
-}
-if (args)
-	ret = call_args(args, front, exe_ret);
+	if (args)
+		ret = call_args(args, front, exe_ret);
 
 	free(front);
 	return (ret);
