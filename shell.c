@@ -1,130 +1,60 @@
-// shell.c
 #include "shell.h"
 
-void shell_loop(void)
+/**
+ * main entry code
+ * @argc: The number of command line arguments
+ * @argv: Array of arguements
+ * Return: returns an integer
+ */
+
+int main(int argc, char *argv[])
 {
-    char *line;
-    char **args;
-    int status;
+        int ret = 0, retn;
+        int *exe_ret = &retn, hist;
+        char *prompt = "#cisfun$ ", *new_line = "\n", *name;
 
-    do
-    {
-        write(STDOUT_FILENO, "SimpleShell> ", 13);
-        line = read_line();
-        args = split_line(line);
-        status = execute_command(args);
+        name = argv[0];
+        hist = 1;
+        aliases = NULL;
+        signal(SIGINT, signal_control);
 
-        free(line);
-        free(args);
+	*exe_ret = 0;
+        environ = _copyenv();
+        if (!environ)
+                exit(-100);
 
-    } while (status);
-}
-
-char *read_line(void)
-{
-    char *line = NULL;
-    size_t len = 0;
-
-    getline(&line, &len, stdin);
-    line[strcspn(line, "\n")] = '\0';
-
-    return line;
-}
-
-char **split_line(char *line)
-{
-    char **tokens = malloc(MAX_TOKENS * sizeof(char *));
-    char *token;
-    int i = 0;
-
-    token = strtok(line, " ");
-    while (token != NULL)
-    {
-        tokens[i++] = token;
-        token = strtok(NULL, " ");
-    }
-    tokens[i] = NULL;
-
-    return tokens;
-}
-
-int execute_command(char **args)
-{
-    pid_t pid, wpid;
-    int status;
-
-    if (args[0] == NULL)
-        return 1;
-
-    if (strcmp(args[0], "cd") == 0)
-    {
-        if (args[1] == NULL)
-            write(STDERR_FILENO, "SimpleShell: expected argument to \"cd\"\n", 42);
-        else
+        if (argc != 1)
         {
-            if (chdir(args[1]) != 0)
-                perror("SimpleShell");
+                ret = take_file(argv[1], exe_ret);
+                free_env();
+                free_alias_list(aliases);
+                return (*exe_ret);
         }
-    }
-    else if (strcmp(args[0], "ls") == 0 || strcmp(args[0], "mkdir") == 0 || strcmp(args[0], "env") == 0)
-    {
-        pid = fork();
-        if (pid == 0)
+
+        if (!isatty(STDIN_FILENO))
         {
-            // Child process
-            if (execvp(args[0], args) == -1)
-                perror("SimpleShell");
-            exit(EXIT_FAILURE);
+                while (ret != END_OF_FILE && ret != EXIT)
+                        ret = handle_args(exe_ret);
+                free_env();
+                free_alias_list(aliases);
+                return (*exe_ret);
         }
-        else if (pid < 0)
+
+        while (1)
         {
-            perror("SimpleShell");
-        }
-        else
-        {
-            // Parent process
-            do
-            {
-                wpid = waitpid(pid, &status, WUNTRACED);
-            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-        }
-    }
-    else if (strcmp(args[0], "exit") == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        // Check if the command exists in the PATH
-        if (access(args[0], F_OK) != -1)
-        {
-            pid = fork();
-            if (pid == 0)
-            {
-                // Child process
-                if (execvp(args[0], args) == -1)
-                    perror("SimpleShell");
-                exit(EXIT_FAILURE);
-            }
-            else if (pid < 0)
-            {
-                perror("SimpleShell");
-            }
-            else
-            {
-                // Parent process
-                do
+                write(STDOUT_FILENO, prompt, 2);
+                ret = handle_args(exe_ret);
+                if (ret == END_OF_FILE || ret == EXIT)
                 {
-                    wpid = waitpid(pid, &status, WUNTRACED);
-                } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-            }
+                        if (ret == END_OF_FILE)
+                                write(STDOUT_FILENO, new_line, 1);
+                        free_env();
+                        free_alias_list(aliases);
+                        exit(*exe_ret);
+                }
         }
-        else
-        {
-            write(STDERR_FILENO, "SimpleShell: command not found\n", 30);
-        }
-    }
 
-    return 1;
+        free_env();
+        free_alias_list(aliases);
+        return (*exe_ret);
 }
-
